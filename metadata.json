@@ -1,0 +1,5 @@
+{
+  "name": "Stock Exchange: Insider Trading",
+  "description": "A real-time multiplayer board game where players use insider information to manipulate the stock market and build the largest portfolio.",
+  "requestFramePermissions": []
+}
