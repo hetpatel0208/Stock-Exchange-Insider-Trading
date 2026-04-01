@@ -61,9 +61,11 @@ async function startServer() {
   const httpServer = createServer(app);
   const io = new Server(httpServer, {
     cors: {
-      origin: "*",
-      methods: ["GET", "POST"]
-    }
+      origin: process.env.FRONTEND_URL || "*",
+      methods: ["GET", "POST"],
+      credentials: true
+    },
+    allowEIO3: true // Compatibility for older clients if needed
   });
 
   const games: Record<string, GameState> = {};
@@ -347,10 +349,8 @@ async function startServer() {
     });
   }
 
-  const PORT = process.env.PORT || 3000;
-  
-  httpServer.listen(PORT as number, "0.0.0.0", () => {
-    console.log(`Server running on port ${PORT}`);
+  httpServer.listen(3000, "0.0.0.0", () => {
+    console.log("Server running on http://localhost:3000");
   });
 }
 

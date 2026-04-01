@@ -88,8 +88,22 @@ export default function App() {
   const [selectedQuantity, setSelectedQuantity] = useState(100);
 
   useEffect(() => {
-    const newSocket = io();
+    // Use the backend URL from environment variables, fallback to current origin for local dev
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || window.location.origin;
+    const newSocket = io(backendUrl, {
+      transports: ['polling', 'websocket'], // Start with polling for better compatibility
+      withCredentials: true
+    });
     setSocket(newSocket);
+
+    newSocket.on('connect', () => {
+      console.log('Connected to backend:', newSocket.id);
+    });
+
+    newSocket.on('connect_error', (err) => {
+      console.error('Socket connection error:', err.message);
+      setError(`Connection failed: ${err.message}`);
+    });
 
     newSocket.on('game_updated', (state: GameState) => {
       setGameState(state);
